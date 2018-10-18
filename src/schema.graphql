@@ -1,0 +1,100 @@
+ type Query{
+        users(query:String!):[User!]!
+        posts(query:String!):[Post!]!
+        comments:[Comment!]
+        me:User!
+    }
+
+    type Mutation{
+        createUser(data:CreateUserInput):User
+        deleteUser(id:ID!):User!
+        updateUser(id:ID!,data:UpdateUserInput!):User!
+        createPost(post:CreatePostInput):Post!
+        createComment(comment:CreateCommentInput):Comment!
+        deletePost(id:ID!):Post!
+        deleteComment(id:ID!):Comment!
+        updatePost(id:ID!,data:UpdatePostInput):Post!
+        updateComment(id:ID!,data:UpdateCommentInput!):Comment!
+    }
+ 
+    type Subscription{
+        comment(postId:ID!):CommentSubscriptionPayload!
+        post:PostSubscriptionPayload!
+    }
+
+    input CreateUserInput{
+        name:String!,
+        email:String!,
+        age:Int
+    }
+
+    input UpdateUserInput{
+          name:String,
+          email:String,
+          age:Int
+    }
+
+    input CreatePostInput{
+        title:String!,
+        body:String!,
+        published:Boolean!,
+        author:ID!
+    }
+
+    input UpdatePostInput{
+        title:String,
+        body:String,
+        published:Boolean,
+    
+    }
+
+    input UpdateCommentInput{
+          text:String,
+    }
+
+    input CreateCommentInput{
+        text:String!,
+        author:ID!,
+        post:ID!    
+    }
+
+    type User{
+        id:ID!
+        name:String!
+        email:String!
+        age:Int
+        post:[Post!]!
+        comment:[Comment!]!
+    }
+
+    type Post{
+        id:ID!
+        title:String!
+        body:String! 
+        published:Boolean!
+        author:User!
+        comment:[Comment!]!
+    }
+
+    type Comment{
+        id:ID!
+        text:String!
+        author:User!
+        post:Post!
+    }
+
+    enum MutationType{
+        CREATED
+        DELETED
+        UPDATED
+    }
+
+    type PostSubscriptionPayload{
+        mutation:MutationType!
+        data:Post!
+    }
+
+    type CommentSubscriptionPayload{
+        mutation:MutationType!
+        data:Comment!
+    }
