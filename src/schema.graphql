@@ -1,12 +1,13 @@
  type Query{
-        users(query:String!):[User!]!
-        posts(query:String!):[Post!]!
-        comments:[Comment!]
+        users(query:String):[User!]!
+        posts(query:String):[Post!]!
+        comments:[Comment!]!
         me:User!
+        post:Post!
     }
 
     type Mutation{
-        createUser(data:CreateUserInput):User
+        createUser(data:CreateUserInput):AuthPayload!
         deleteUser(id:ID!):User!
         updateUser(id:ID!,data:UpdateUserInput!):User!
         createPost(post:CreatePostInput):Post!
@@ -15,6 +16,7 @@
         deleteComment(id:ID!):Comment!
         updatePost(id:ID!,data:UpdatePostInput):Post!
         updateComment(id:ID!,data:UpdateCommentInput!):Comment!
+        logIn(data:LogInUserInput!):AuthPayload!
     }
  
     type Subscription{
@@ -22,23 +24,33 @@
         post:PostSubscriptionPayload!
     }
 
+    type AuthPayload{
+        user:User!
+        token:String!
+    }
+
     input CreateUserInput{
         name:String!,
         email:String!,
-        age:Int
+        password:String!
+    }
+
+    input LogInUserInput{
+        email:String!,
+        password:String!
     }
 
     input UpdateUserInput{
           name:String,
           email:String,
-          age:Int
+        
     }
 
     input CreatePostInput{
         title:String!,
         body:String!,
         published:Boolean!,
-        author:ID!
+      
     }
 
     input UpdatePostInput{
@@ -62,9 +74,9 @@
         id:ID!
         name:String!
         email:String!
-        age:Int
+        password:String!
         post:[Post!]!
-        comment:[Comment!]!
+        comments:[Comment!]!
     }
 
     type Post{
@@ -73,7 +85,7 @@
         body:String! 
         published:Boolean!
         author:User!
-        comment:[Comment!]!
+        comments:[Comment!]!
     }
 
     type Comment{
@@ -91,10 +103,10 @@
 
     type PostSubscriptionPayload{
         mutation:MutationType!
-        data:Post!
+        node:Post
     }
 
     type CommentSubscriptionPayload{
         mutation:MutationType!
-        data:Comment!
+        node:Comment
     }

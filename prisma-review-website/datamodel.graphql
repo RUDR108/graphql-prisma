@@ -1,0 +1,41 @@
+type User {
+  id: ID! @unique
+  username: String! @unique
+  # book:Book
+  review:[Review!]! @relation(name:"ReviewToUser",onDelete:CASCADE)
+  # email:String! @unique
+  # post:[Post!]! @relation(name:"PostToUser",onDelete:CASCADE)
+  # comments:[Comment!]! @relation(name:"CommentToUser",onDelete:CASCADE)  
+}
+
+type Book{
+  id:ID! @unique
+  title:String!
+  author:String!
+  isbn:String!
+  review:[Review!]! @relation(name:"ReviewToBook",onDelete:CASCADE)
+}
+
+type Review{
+  id:ID! @unique
+  text:String!
+  rating:Int!
+  author:User! @relation(name:"ReviewToUser",onDelete:SET_NULL)
+  book:Book! @relation(name:"ReviewToBook",onDelete:SET_NULL)
+}
+
+# type Post{
+#   id:ID! @unique
+#   title:String!
+#   body:String!
+#   published:Boolean!
+#   author:User! @relation(name:"PostToUser",onDelete:SET_NULL)
+#   comment:[Comment!]! @relation(name:"CommentToPost",onDelete:CASCADE)
+# }
+
+# type Comment{
+#   id:ID! @unique
+#   text:String!
+#   author:User! @relation(name:"CommentToUser",onDelete:SET_NULL)
+#   post:Post! @relation(name:"CommentToPost",onDelete:SET_NULL)
+# }
