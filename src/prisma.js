@@ -1,17 +1,31 @@
-import {Prisma} from 'prisma-binding';
+import { Prisma } from 'prisma-binding'
+import {fragmentReplacements} from './resolvers/index';
 
 const prisma = new Prisma({
-    typeDefs:'src/generated/prisma.graphql',
-    endpoint:'http://192.168.99.100:4466',
-    secret:'somethingsecret'
+    typeDefs: 'src/generated/prisma.graphql',
+    endpoint: 'http://192.168.99.100:4466',
+    secret:'thisismysupersecret',
+    fragmentReplacements
 })
 
-export {prisma as default};
+
+export { prisma as default }
+
+
+
+// import {Prisma} from 'prisma-binding';
+
+// const prisma = new Prisma({
+//     typeDefs:'src/generated/prisma.graphql',
+//     endpoint:'http://192.168.99.100:4466',
+//     secret:'somethingsecret'
+// })
+
+// export {prisma as default};
 
 //    prisma.query.users(null,'{id name email post {id title}}').then((data)=>{
 //    console.log(JSON.stringify(data,undefined,2))
 //    }).catch((e)=>{
-//         console.log('error',e);
 //    })
 
 //    prisma.query.comments(null,'{ id text post { title } author { name }}').then((data)=>{

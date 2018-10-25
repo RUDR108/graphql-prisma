@@ -1,3 +1,5 @@
+import getUserId from '../utils/getUserId';
+
 const Subscription={
 
     // prisma --> Node --> client
@@ -25,6 +27,20 @@ const Subscription={
                 }
             },info)
             // return pubsub.asyncIterator(`post`)
+        }
+    },
+    myPost:{
+        subscribe(parent,args,{db,pubsub,prisma,request},info){
+           const userId = getUserId(request)
+           return prisma.subscription.post({
+            where:{
+                node:{
+                author:{
+                    id:userId
+                }
+            }
+        }
+    },info)
         }
     }
 }

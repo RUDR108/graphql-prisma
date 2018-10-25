@@ -1,5 +1,5 @@
 # source: http://192.168.99.100:4466
-# timestamp: Fri Oct 19 2018 21:22:35 GMT+0530 (India Standard Time)
+# timestamp: Tue Oct 23 2018 20:59:44 GMT+0530 (India Standard Time)
 
 type AggregateComment {
   count: Int!
@@ -23,6 +23,8 @@ type Comment implements Node {
   text: String!
   author(where: UserWhereInput): User!
   post(where: PostWhereInput): Post!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -84,6 +86,8 @@ enum CommentOrderByInput {
 type CommentPreviousValues {
   id: ID!
   text: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type CommentSubscriptionPayload {
@@ -270,6 +274,50 @@ input CommentWhereInput {
 
   """All values not ending with the given string."""
   text_not_ends_with: String
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   author: UserWhereInput
   post: PostWhereInput
 }
@@ -277,6 +325,8 @@ input CommentWhereInput {
 input CommentWhereUniqueInput {
   id: ID
 }
+
+scalar DateTime
 
 """
 The `Long` scalar type represents non-fractional signed whole numeric values.
@@ -339,6 +389,8 @@ type Post implements Node {
   published: Boolean!
   author(where: UserWhereInput): User!
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -355,7 +407,7 @@ input PostCreateInput {
   title: String!
   body: String!
   published: Boolean!
-  author: UserCreateOneWithoutPostInput!
+  author: UserCreateOneWithoutPostsInput!
   comments: CommentCreateManyWithoutPostInput
 }
 
@@ -380,7 +432,7 @@ input PostCreateWithoutCommentsInput {
   title: String!
   body: String!
   published: Boolean!
-  author: UserCreateOneWithoutPostInput!
+  author: UserCreateOneWithoutPostsInput!
 }
 
 """An edge in a connection."""
@@ -412,6 +464,8 @@ type PostPreviousValues {
   title: String!
   body: String!
   published: Boolean!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type PostSubscriptionPayload {
@@ -457,7 +511,7 @@ input PostUpdateInput {
   title: String
   body: String
   published: Boolean
-  author: UserUpdateOneWithoutPostInput
+  author: UserUpdateOneWithoutPostsInput
   comments: CommentUpdateManyWithoutPostInput
 }
 
@@ -489,7 +543,7 @@ input PostUpdateWithoutCommentsDataInput {
   title: String
   body: String
   published: Boolean
-  author: UserUpdateOneWithoutPostInput
+  author: UserUpdateOneWithoutPostsInput
 }
 
 input PostUpdateWithWhereUniqueWithoutAuthorInput {
@@ -641,6 +695,50 @@ input PostWhereInput {
 
   """All values that are not equal to given value."""
   published_not: Boolean
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
   author: UserWhereInput
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
@@ -680,8 +778,10 @@ type User implements Node {
   name: String!
   email: String!
   password: String!
-  post(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
   comments(where: CommentWhereInput, orderBy: CommentOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Comment!]
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 """A connection to a list of items."""
@@ -698,7 +798,7 @@ input UserCreateInput {
   name: String!
   email: String!
   password: String!
-  post: PostCreateManyWithoutAuthorInput
+  posts: PostCreateManyWithoutAuthorInput
   comments: CommentCreateManyWithoutAuthorInput
 }
 
@@ -707,8 +807,8 @@ input UserCreateOneWithoutCommentsInput {
   connect: UserWhereUniqueInput
 }
 
-input UserCreateOneWithoutPostInput {
-  create: UserCreateWithoutPostInput
+input UserCreateOneWithoutPostsInput {
+  create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
 }
 
@@ -716,10 +816,10 @@ input UserCreateWithoutCommentsInput {
   name: String!
   email: String!
   password: String!
-  post: PostCreateManyWithoutAuthorInput
+  posts: PostCreateManyWithoutAuthorInput
 }
 
-input UserCreateWithoutPostInput {
+input UserCreateWithoutPostsInput {
   name: String!
   email: String!
   password: String!
@@ -755,6 +855,8 @@ type UserPreviousValues {
   name: String!
   email: String!
   password: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 type UserSubscriptionPayload {
@@ -800,7 +902,7 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  post: PostUpdateManyWithoutAuthorInput
+  posts: PostUpdateManyWithoutAuthorInput
   comments: CommentUpdateManyWithoutAuthorInput
 }
 
@@ -812,22 +914,22 @@ input UserUpdateOneWithoutCommentsInput {
   upsert: UserUpsertWithoutCommentsInput
 }
 
-input UserUpdateOneWithoutPostInput {
-  create: UserCreateWithoutPostInput
+input UserUpdateOneWithoutPostsInput {
+  create: UserCreateWithoutPostsInput
   connect: UserWhereUniqueInput
   delete: Boolean
-  update: UserUpdateWithoutPostDataInput
-  upsert: UserUpsertWithoutPostInput
+  update: UserUpdateWithoutPostsDataInput
+  upsert: UserUpsertWithoutPostsInput
 }
 
 input UserUpdateWithoutCommentsDataInput {
   name: String
   email: String
   password: String
-  post: PostUpdateManyWithoutAuthorInput
+  posts: PostUpdateManyWithoutAuthorInput
 }
 
-input UserUpdateWithoutPostDataInput {
+input UserUpdateWithoutPostsDataInput {
   name: String
   email: String
   password: String
@@ -839,9 +941,9 @@ input UserUpsertWithoutCommentsInput {
   create: UserCreateWithoutCommentsInput!
 }
 
-input UserUpsertWithoutPostInput {
-  update: UserUpdateWithoutPostDataInput!
-  create: UserCreateWithoutPostInput!
+input UserUpsertWithoutPostsInput {
+  update: UserUpdateWithoutPostsDataInput!
+  create: UserCreateWithoutPostsInput!
 }
 
 input UserWhereInput {
@@ -1013,9 +1115,53 @@ input UserWhereInput {
 
   """All values not ending with the given string."""
   password_not_ends_with: String
-  post_every: PostWhereInput
-  post_some: PostWhereInput
-  post_none: PostWhereInput
+  updatedAt: DateTime
+
+  """All values that are not equal to given value."""
+  updatedAt_not: DateTime
+
+  """All values that are contained in given list."""
+  updatedAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  updatedAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  updatedAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  updatedAt_lte: DateTime
+
+  """All values greater than the given value."""
+  updatedAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  updatedAt_gte: DateTime
+  createdAt: DateTime
+
+  """All values that are not equal to given value."""
+  createdAt_not: DateTime
+
+  """All values that are contained in given list."""
+  createdAt_in: [DateTime!]
+
+  """All values that are not contained in given list."""
+  createdAt_not_in: [DateTime!]
+
+  """All values less than the given value."""
+  createdAt_lt: DateTime
+
+  """All values less than or equal the given value."""
+  createdAt_lte: DateTime
+
+  """All values greater than the given value."""
+  createdAt_gt: DateTime
+
+  """All values greater than or equal the given value."""
+  createdAt_gte: DateTime
+  posts_every: PostWhereInput
+  posts_some: PostWhereInput
+  posts_none: PostWhereInput
   comments_every: CommentWhereInput
   comments_some: CommentWhereInput
   comments_none: CommentWhereInput
